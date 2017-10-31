@@ -33,6 +33,7 @@ public class ShoppingCart {
             cartList.add(object);
             totalPrice += object.getPrice();
             medCount++;
+//            System.out.println(cartList);
         }
     }
 
@@ -42,10 +43,25 @@ public class ShoppingCart {
      * @param object - a Medicament object
      */
     public void mediatorDeleteFromCart(Medicament object) {
-        for (Medicament x : cartList) {
-            if (x.equals(object)) {
-                cartList.remove(x);
+//        for (Medicament x : cartList) {
+//            if (x.equals(object)) {
+//                cartList.remove(x);
+//                totalPrice -= object.getPrice();
+//            }
+//        }
+        for(int i = 0;i < cartList.size();i++){
+            int size = cartList.size();
+            if(size == 0) {
+                break;
+            }
+            while(cartList.get(i).equals(object)){
+                boolean inBounds = (i >=0) && (i < cartList.size());
+                cartList.remove(i);
                 totalPrice -= object.getPrice();
+                size = cartList.size();
+                if(size == 0) {
+                    break;
+                }
             }
         }
     }
@@ -109,7 +125,7 @@ public class ShoppingCart {
         return maxMed + ", price is " + price + " lei.";
     }
 
-    public void showCart(){
+    public void showCart() {
         System.out.println(cartList.toString());
     }
 

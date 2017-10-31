@@ -101,12 +101,12 @@ public class FarmacieService {
         List<Medicament> sortMedList = new ArrayList<>();
 
         sortMedList.addAll(farmacieRepository.getAll());
-
+//        System.out.println(sortMedList);
         int temp;
         String temp2;
         Medicament temp3;
         for (int i = 0; i < sortMedList.size(); i++) {
-            for (int j = 1; j < sortMedList.size() - 1; j++) {
+            for (int j = 1; j < sortMedList.size(); j++) {
                 if (sortMedList.get(j - 1).getPrice() > sortMedList.get(j).getPrice()) {
 
 //                    temp = sortMedList.get(j-1).getPrice();
@@ -120,6 +120,7 @@ public class FarmacieService {
 //                    temp2 = sortMedList.get(j-1).getName();
 //                    sortMedList.get(j-1).setName(sortMedList.get(j).getName());
 //                    sortMedList.get(j).setName(temp2);
+//                    System.out.println(sortMedList);
                 }
             }
         }
@@ -163,6 +164,21 @@ public class FarmacieService {
         inner.deleteFromCart(medName);
     }
 
+    /**
+     * Displays the sorted Medicament List
+     *
+     * @param list
+     * @return a String containing all the Medicament objects
+     */
+    public String anotherToString(List<Medicament> list) {
+        StringBuilder result = new StringBuilder("+");
+        for (int i = 0; i < list.size(); i++) {
+            result.append(" ").append(list.get(i));
+            result.append('\n');
+        }
+        return result.toString();
+    }
+
     private class CartInnerClass {
 
         private FarmacieRepository repo;
@@ -199,27 +215,12 @@ public class FarmacieService {
          * @param medName
          */
         public void deleteFromCart(String medName) {
-            for (Medicament x : repo.getAll()) {
-                if (x.getName().equalsIgnoreCase(medName)) {
-                    service.getCart().mediatorDeleteFromCart(x);
+            for (int i = 0;i < repo.getAll().size();i++) {
+                if (repo.getAll().get(i).getName().equalsIgnoreCase(medName)) {
+                    service.getCart().mediatorDeleteFromCart(repo.getAll().get(i));
                 }
             }
         }
-    }
-
-    /**
-     * Displays the sorted Medicament List
-     *
-     * @param list
-     * @return a String containing all the Medicament objects
-     */
-    public String anotherToString(List<Medicament> list) {
-        StringBuilder result = new StringBuilder("+");
-        for (int i = 0; i < list.size(); i++) {
-            result.append(" ").append(list.get(i));
-            result.append('\n');
-        }
-        return result.toString();
     }
 
 
