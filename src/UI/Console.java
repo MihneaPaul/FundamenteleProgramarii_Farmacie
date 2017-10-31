@@ -142,10 +142,13 @@ public class Console {
     private void menuShop() {
         System.out.println("----- Magazin -----");
         System.out.println();
+        System.out.println("0. Vizualiati cosul de cumparaturi");
         System.out.println("1. Adaugati un produs in cos");
         System.out.println("2. Stergeti un produs din cos");
-        System.out.println("3. Cost total");
-        System.out.println("4. Checkout");
+        System.out.println("3. Produsul cu cost maxim din cos");
+        System.out.println("4. Cost total");
+        System.out.println("5. Checkout");
+        System.out.println("X. Exit");
     }
 
     /**
@@ -284,6 +287,10 @@ public class Console {
 //                        FarmacieService.CartInnerClass inner = new FarmacieService.CartInnerClass(repo, service);
 
                         switch (selectionShop) {
+                            case "0":
+                                service.getCart().showCart();
+                                break;
+
                             case "1":
                                 System.out.print("Selectati produsul:  ");
                                 String selectedProduct = scanShop.next();
@@ -303,11 +310,19 @@ public class Console {
                                 break;
 
                             case "3":
-                                System.out.println(service.getCart().getTotalPrice());
+                                System.out.println(service.getCart().max());
                                 break;
 
                             case "4":
+                                System.out.println(service.getCart().getTotalPrice());
+                                break;
+
+                            case "5":
                                 System.out.println(service.getCart().checkout());
+                                canAccessCart = false;
+                                break;
+
+                            case "x":
                                 canAccessCart = false;
                                 break;
                         }

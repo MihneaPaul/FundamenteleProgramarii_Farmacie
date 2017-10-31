@@ -108,4 +108,15 @@ public class ShoppingCart {
         }
         return maxMed + ", price is " + price + " lei.";
     }
+
+    public void showCart(){
+        System.out.println(cartList.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+                "cartList=" + cartList +
+                '}';
+    }
 }

@@ -74,9 +74,9 @@ public class Medicament {
 
     @Override
     public String toString() {
-        return "Medicament{" +
-                "name='" + name + '\'' +
-                ", price=" + price +
-                '}';
+        return "Medicament {" +
+                "name = '" + name + '\'' +
+                ", price = " + price +
+                " }\n";
     }
 }
