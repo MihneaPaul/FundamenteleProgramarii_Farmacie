@@ -7,23 +7,49 @@ public class Medicament {
     private String name;
     private int price;
 
+    /**
+     * Constructor
+     *
+     * @param name
+     * @param price
+     */
     public Medicament(String name, int price) {
         this.name = name;
         this.price = price;
     }
 
+    /**
+     * Accessor for name field
+     *
+     * @return name field
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Mutator for name field
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Accessor for price field
+     *
+     * @return price field
+     */
     public int getPrice() {
         return price;
     }
 
+    /**
+     * Mutator for price field
+     *
+     * @param price
+     */
     public void setPrice(int price) {
         this.price = price;
     }

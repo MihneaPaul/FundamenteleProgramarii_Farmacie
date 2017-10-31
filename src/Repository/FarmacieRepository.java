@@ -11,17 +11,32 @@ import java.util.List;
 public class FarmacieRepository {
     private List<Medicament> medsList = new ArrayList<>();
 
-    public FarmacieRepository add(Medicament med){
-
-        this.medsList.add(new Medicament(med.getName(),med.getPrice()));
+    /**
+     * Adds a Medicament object to the arrayList
+     *
+     * @param med
+     * @return FarmacieRepository class
+     */
+    public FarmacieRepository add(Medicament med) {
+        try {
+            this.medsList.add(new Medicament(med.getName(), med.getPrice()));
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
         return this;
     }
 
-    public boolean removeFromList(Medicament med){
+    /**
+     * Removes a Medicament object from the arrayList
+     *
+     * @param med
+     * @return a boolean that shows if the remove was successful
+     */
+    public boolean removeFromList(Medicament med) {
         Object[] obj = medsList.toArray();
 
-        for(int i=0;i<medsList.size();i++){
-            if(medsList.get(i).getName().equalsIgnoreCase(med.getName())){
+        for (int i = 0; i < medsList.size(); i++) {
+            if (medsList.get(i).getName().equalsIgnoreCase(med.getName())) {
                 medsList.remove(i);
                 return true;
             }
@@ -29,13 +44,21 @@ public class FarmacieRepository {
         return false;
     }
 
-    public List<Medicament> getAll(){
+    /**
+     * Accessor for the arrayList with Medicament objects
+     *
+     * @return
+     */
+    public List<Medicament> getAll() {
         return this.medsList;
     }
 
-    public void medsDB(){
-        Medicament med1 = new Medicament("Nurofen",10);
-        Medicament med2 = new Medicament("Algocalmin",15);
+    /**
+     * Adds some predefined Medicament objects to the arrayList when the program starts
+     */
+    public void medsDB() {
+        Medicament med1 = new Medicament("Nurofen", 10);
+        Medicament med2 = new Medicament("Algocalmin", 15);
         Medicament med3 = new Medicament("Xanax", 5);
         Medicament med4 = new Medicament("Zyloft", 17);
         Medicament med5 = new Medicament("Codeine", 23);
@@ -52,10 +75,13 @@ public class FarmacieRepository {
 
     }
 
-    public void printAll(){
-        for(Medicament med: medsList){
+    /**
+     * Prints the arrayList with the Medicament objects
+     */
+    public void printAll() {
+        for (Medicament med : medsList) {
             System.out.println("[ " + med.getName() + " ]" +
-                               "[ " + med.getPrice() + " ]");
+                    "[ " + med.getPrice() + " ]");
         }
     }
 

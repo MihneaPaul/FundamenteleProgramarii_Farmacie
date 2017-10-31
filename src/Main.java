@@ -8,10 +8,10 @@ import Validator.MedValidator;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String...args) {
         FarmacieRepository repo = new FarmacieRepository();
         MedValidator validator = new MedValidator();
-        FarmacieService service = new FarmacieService(repo,validator);
+        FarmacieService service = new FarmacieService(repo, validator);
         Console console = new Console(service, repo);
 
         console.start();

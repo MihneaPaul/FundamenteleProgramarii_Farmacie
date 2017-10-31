@@ -16,33 +16,59 @@ public class FarmacieService {
     private MedValidator medValidator;
     private ShoppingCart cart = new ShoppingCart();
 
+    /**
+     * Constructor
+     *
+     * @param farmacieRepository
+     * @param medValidator
+     */
     public FarmacieService(FarmacieRepository farmacieRepository, MedValidator medValidator) {
+        super();
         this.farmacieRepository = farmacieRepository;
         this.medValidator = medValidator;
     }
 
+    /**
+     * Accessor for the ShoppingCart class, for use of the 'cartList' arrayList in the ShoppingCart class and it's methods
+     *
+     * @return the ShoppingCart class
+     */
     public ShoppingCart getCart() {
         return cart;
     }
 
-    public void addMed(String name, int price){
+    /**
+     * Calls the add method from the Repository class to add a new Medicament object with the desired name and price to the Medicament ArrayList, after validation
+     *
+     * @param name  of the Medicament
+     * @param price of the Medicament
+     */
+    public void addMed(String name, int price) {
         Medicament med = new Medicament(name, price);
-        this.medValidator.validate(med);
-
+        try {
+            this.medValidator.validate(med);
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
         FarmacieRepository added = this.farmacieRepository.add(med);
-        if(added == null){
-            throw new IllegalArgumentException("Cannot add med with price "+ price);
+        if (added == null) {
+            throw new IllegalArgumentException("Cannot add med with price " + price);
         }
     }
 
-    public void deleteMed(String nameOfMed){
+    /**
+     * Calls the delete method from the Repository class to delete the desired Medicament object (if found) from the Medicament ArrayList
+     *
+     * @param nameOfMed - field 'name' from the Medicament class
+     */
+    public void deleteMed(String nameOfMed) {
         List<String> searchedNames;
         searchedNames = search(nameOfMed);
 
-        if(searchedNames.size() == 1){
+        if (searchedNames.size() == 1) {
             String name = searchedNames.get(0);
-            for(int i=0;i<farmacieRepository.getAll().size();i++){
-                if(name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())){
+            for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
+                if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
                     farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
                 }
             }
@@ -50,34 +76,50 @@ public class FarmacieService {
 
     }
 
-    public List<String> search(String partialName){
+    /**
+     * Searches the ArrayList from the Repository class for a Medicament with the desired name
+     *
+     * @param partialName - name of the Medicament to search
+     * @return a List containing the Medicament objects that contains the value of the parameter
+     */
+    public List<String> search(String partialName) {
         List<String> searchedNames = new ArrayList<>();
-        for(Medicament med : farmacieRepository.getAll()){
-            if(med.getName().toLowerCase().contains(partialName.toLowerCase())){
+        for (Medicament med : farmacieRepository.getAll()) {
+            if (med.getName().toLowerCase().contains(partialName.toLowerCase())) {
                 searchedNames.add(med.getName());
             }
         }
         return searchedNames;
     }
 
-    public String bubbleSort(){
+    /**
+     * Sorts by price field the Medicament Objects in the ArrayList from the Repository
+     *
+     * @return a String containing all the Medicament objects, in ascending order of their price
+     */
+    public String bubbleSort() {
         List<Medicament> sortMedList = new ArrayList<>();
 
         sortMedList.addAll(farmacieRepository.getAll());
 
         int temp;
         String temp2;
-        for(int i=0;i<sortMedList.size();i++){
-            for(int j=1;j<sortMedList.size()-1;j++){
-                if(sortMedList.get(j-1).getPrice() > sortMedList.get(j).getPrice()){
+        Medicament temp3;
+        for (int i = 0; i < sortMedList.size(); i++) {
+            for (int j = 1; j < sortMedList.size() - 1; j++) {
+                if (sortMedList.get(j - 1).getPrice() > sortMedList.get(j).getPrice()) {
 
-                    temp = sortMedList.get(j-1).getPrice();
-                    sortMedList.get(j-1).setPrice(sortMedList.get(j).getPrice());
-                    sortMedList.get(j).setPrice(temp);
+//                    temp = sortMedList.get(j-1).getPrice();
+//                    sortMedList.get(j-1).setPrice(sortMedList.get(j).getPrice());
+//                    sortMedList.get(j).setPrice(temp);
 
-                    temp2 = sortMedList.get(j-1).getName();
-                    sortMedList.get(j-1).setName(sortMedList.get(j).getName());
-                    sortMedList.get(j).setName(temp2);
+                    temp3 = sortMedList.get(j - 1);
+                    sortMedList.set(j - 1, sortMedList.get(j));
+                    sortMedList.set(j, temp3);
+
+//                    temp2 = sortMedList.get(j-1).getName();
+//                    sortMedList.get(j-1).setName(sortMedList.get(j).getName());
+//                    sortMedList.get(j).setName(temp2);
                 }
             }
         }
@@ -86,18 +128,53 @@ public class FarmacieService {
         return anotherToString(sortMedList);
     }
 
-    public List<Medicament> getAll(){
+    /**
+     * Accessor
+     *
+     * @return a List containing all the Medicament objects in the Repository class
+     */
+    public List<Medicament> getAll() {
         return this.farmacieRepository.getAll();
     }
 
+    /**
+     * Calls the inner class method addToCart
+     *
+     * @param repo     - an instance of the Repository class
+     * @param service  - an instance of the Service class
+     * @param medName  - name of the Medicament object
+     * @param quantity - quantity of the Medicament object
+     */
 
+    public void innerAddToCart(FarmacieRepository repo, FarmacieService service, String medName, int quantity) {
+        FarmacieService.CartInnerClass inner = new CartInnerClass(repo, service);
+        inner.addToCart(medName, quantity);
+    }
 
-    public static class CartInnerClass {
+    /**
+     * Calls the inner class method deleteFromCart
+     *
+     * @param repo    - an instance of the Repository class
+     * @param service - an instance of the Service class
+     * @param medName - name of the Medicament object
+     */
+    public void innerDeleteFromCart(FarmacieRepository repo, FarmacieService service, String medName) {
+        FarmacieService.CartInnerClass inner = new CartInnerClass(repo, service);
+        inner.deleteFromCart(medName);
+    }
+
+    private class CartInnerClass {
 
         private FarmacieRepository repo;
         private FarmacieService service;
 
-        public CartInnerClass(FarmacieRepository repo, FarmacieService service) {
+        /**
+         * Constructor of the inner class
+         *
+         * @param repo    - an instance of the Repository class
+         * @param service - an instance of the Service class
+         */
+        private CartInnerClass(FarmacieRepository repo, FarmacieService service) {
             this.repo = repo;
             this.service = service;
         }
@@ -130,6 +207,12 @@ public class FarmacieService {
         }
     }
 
+    /**
+     * Displays the sorted Medicament List
+     *
+     * @param list
+     * @return a String containing all the Medicament objects
+     */
     public String anotherToString(List<Medicament> list) {
         StringBuilder result = new StringBuilder("+");
         for (int i = 0; i < list.size(); i++) {

@@ -4,6 +4,7 @@ import Domain.Medicament;
 import Repository.FarmacieRepository;
 import Service.FarmacieService;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -14,17 +15,29 @@ public class Console {
     private FarmacieService service;
     private FarmacieRepository repo;
 
+    /**
+     * Constructor
+     *
+     * @param service
+     * @param repo
+     */
     public Console(FarmacieService service, FarmacieRepository repo) {
         this.service = service;
         this.repo = repo;
     }
 
+    /**
+     * Prints all the Medicament objects from the Repository's ArrayList of Medicament objects
+     */
     private void showAll() {
         for (Medicament m : this.service.getAll()) {
             System.out.println(m);
         }
     }
 
+    /**
+     * Console method that calls the add() method from the Service class
+     */
     private void addMed() {
         System.out.println("Nume:  ");
         String name = scanner.nextLine();
@@ -35,16 +48,24 @@ public class Console {
         int price = scanner.nextInt();
         System.out.println();
 
-        try {
-            Medicament m = new Medicament(name, price);
-            service.addMed(m.getName(), m.getPrice());
-            System.out.println("Medicament adaugat cu success");
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
+        Medicament m = new Medicament(name, price);
+        service.addMed(m.getName(), m.getPrice());
+        if ((int) price != price) {
+            throw new InputMismatchException("Price must be a number!");
+        } else {
+            System.out.println("Medicament adaugat cu success");
         }
+//        } catch (IllegalArgumentException e) {
+//            System.err.println("Error: " + e.getMessage());
+//        } catch (InputMismatchException e){
+//            System.err.println("Wrong input");
+//        }
     }
 
+    /**
+     * Console method that calls the delete() method from the Service class
+     */
     private void deleteMed() {
         System.out.println("Nume:  ");
         String name = scanner.nextLine();
@@ -52,25 +73,39 @@ public class Console {
         try {
             service.deleteMed(name);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
+        } catch (InputMismatchException e) {
+            System.err.println("Wrong input");
         }
     }
 
+    /**
+     * Console method that calls the search() method from the Service class
+     */
     private void search() {
         System.out.println("Nume:  ");
         String name = scanner.next();
         System.out.println(service.search(name));
     }
 
+    /**
+     * Console method that calls the bubbleSort() method from the Service class
+     */
     private void bubbleSort() {
         System.out.println(service.bubbleSort());
     }
 
+    /**
+     * Displays the first menu
+     */
     private void mainMenu() {
         System.out.println("1. Customer");
         System.out.println("2. Admin");
     }
 
+    /**
+     * Displays the 'ADMIN' menu
+     */
     private void menuAdmin() {
         System.out.println("----- Farmacie -----");
         System.out.println();
@@ -85,6 +120,9 @@ public class Console {
         System.out.print("Selectia: ");
     }
 
+    /**
+     * Displays the 'CUSTOMER' menu
+     */
     private void menuCustomer() {
         System.out.println("----- Farmacie -----");
         System.out.println();
@@ -98,6 +136,9 @@ public class Console {
 
     }
 
+    /**
+     * Displays the 'SHOP' menu
+     */
     private void menuShop() {
         System.out.println("----- Magazin -----");
         System.out.println();
@@ -107,6 +148,9 @@ public class Console {
         System.out.println("4. Checkout");
     }
 
+    /**
+     * Calls all the 'console methods' when the program starts
+     */
     public void start() {
         repo.medsDB();
         boolean canAccessAdmin = false;
@@ -132,12 +176,12 @@ public class Console {
                     } else try {
                         throw new Exception("Incorrect password");
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        System.err.println(e.getMessage());
                     }
                 } else try {
                     throw new Exception("Incorrect account");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.err.println(e.getMessage());
                 }
                 System.out.println();
                 break;
@@ -153,7 +197,11 @@ public class Console {
                     break;
 
                 case "2":
-                    addMed();
+                    try {
+                        addMed();
+                    } catch (InputMismatchException e) {
+                        System.err.println(e.getMessage());
+                    }
                     System.out.println();
                     break;
 
@@ -208,7 +256,32 @@ public class Console {
                         menuShop();
                         System.out.print("Selectia:  ");
                         String selectionShop = scanShop.next();
-                        FarmacieService.CartInnerClass inner = new FarmacieService.CartInnerClass(repo, service);
+
+//                        for (Constructor<?> constructor : FarmacieService.CartInnerClass.class.getDeclaredConstructors()) {
+//                            System.out.println(constructor);
+//                        }
+//                        try {
+//                            Constructor<CartInnerClass> ctor = FarmacieService.CartInnerClass.class.getDeclaredConstructor(FarmacieService.class);
+//                            ctor.setAccessible(true);
+//
+//                            try {
+//                                FarmacieService.CartInnerClass inner = ctor.newInstance(service);
+//                            } catch (InstantiationException e) {
+//                                e.printStackTrace();
+//                            } catch (IllegalAccessException e) {
+//                                e.printStackTrace();
+//                            } catch (IllegalArgumentException e) {
+//                                e.printStackTrace();
+//                            } catch (InvocationTargetException e) {
+//                                e.printStackTrace();
+//                            }
+//                        } catch (NoSuchMethodException e) {
+//                            e.printStackTrace();
+//                        } catch (SecurityException e) {
+//                            e.printStackTrace();
+//                        }
+
+//                        FarmacieService.CartInnerClass inner = new FarmacieService.CartInnerClass(repo, service);
 
                         switch (selectionShop) {
                             case "1":
@@ -218,13 +291,15 @@ public class Console {
                                 scanShop.nextLine();
                                 System.out.print("Introduceti cantitatea:  ");
                                 int quantityOfProduct = scanShop.nextInt();
-                                inner.addToCart(selectedProduct, quantityOfProduct);
+//                                inner.addToCart(selectedProduct, quantityOfProduct);
+                                service.innerAddToCart(repo, service, selectedProduct, quantityOfProduct);
                                 break;
 
                             case "2":
                                 System.out.print("Selectati produsul:  ");
                                 String willBeDeletedProduct = scanShop.next();
-                                inner.deleteFromCart(willBeDeletedProduct);
+//                                inner.deleteFromCart(willBeDeletedProduct);
+                                service.innerDeleteFromCart(repo, service, willBeDeletedProduct);
                                 break;
 
                             case "3":
