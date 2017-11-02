@@ -2,7 +2,6 @@ package Service;
 
 import Domain.Medicament;
 import Repository.FarmacieRepository;
-import Repository.ShoppingCart;
 import Validator.MedValidator;
 
 import java.util.ArrayList;
@@ -43,17 +42,19 @@ public class FarmacieService {
      * @param name  of the Medicament
      * @param price of the Medicament
      */
-    public void addMed(String name, int price) {
+    public String addMed(String name, int price) {
         Medicament med = new Medicament(name, price);
         try {
             this.medValidator.validate(med);
+            FarmacieRepository added = this.farmacieRepository.add(med);
+            return "Medicament adaugat cu success";
+//            if (added == null) {
+//                throw new IllegalArgumentException("Cannot add med with price " + price);
+//            }
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
-        FarmacieRepository added = this.farmacieRepository.add(med);
-        if (added == null) {
-            throw new IllegalArgumentException("Cannot add med with price " + price);
-        }
+        return null;
     }
 
     /**
@@ -61,7 +62,7 @@ public class FarmacieService {
      *
      * @param nameOfMed - field 'name' from the Medicament class
      */
-    public void deleteMed(String nameOfMed) {
+    public String deleteMed(String nameOfMed) {
         List<String> searchedNames;
         searchedNames = search(nameOfMed);
 
@@ -70,11 +71,33 @@ public class FarmacieService {
             for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
                 if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
                     farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
+                    return "Medicamentul a fost sters cu success";
                 }
             }
         } else throw new IllegalArgumentException("Found more than 1 med with this name: " + nameOfMed);
-
+        return "";
     }
+
+    public String deleteAllMeds(String nameOfMed){
+        List<String> searchedNames;
+        searchedNames = search(nameOfMed);
+        try {
+            deleteMed(nameOfMed);
+        } catch (IllegalArgumentException e){
+            String name = searchedNames.get(0);
+            for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
+                if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
+                    farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
+                }
+                if(i>0){
+                    i--;
+                }
+            }
+            return "Medicamentul a fost sters cu success";
+        }
+            return "";
+        }
+
 
     /**
      * Searches the ArrayList from the Repository class for a Medicament with the desired name

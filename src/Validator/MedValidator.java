@@ -14,9 +14,12 @@ public class MedValidator {
      */
     public void validate(Medicament med) {
         StringBuilder builder = new StringBuilder();
-
+        String s = med.getName();
         if (med.getPrice() <= 0) {
-            builder.append("Pret incorect!");
+            builder.append("Pret incorect!\n");
+        }
+        if(!s.matches(".*[a-zA-Z].*")){
+            builder.append("Nume incorect!");
         }
         if (builder.length() > 0) {
             throw new IllegalArgumentException(builder.toString());

@@ -1,4 +1,4 @@
-package Repository;
+package Service;
 
 import Domain.Medicament;
 
@@ -49,17 +49,17 @@ public class ShoppingCart {
 //                totalPrice -= object.getPrice();
 //            }
 //        }
-        for(int i = 0;i < cartList.size();i++){
+        for (int i = 0; i < cartList.size(); i++) {
             int size = cartList.size();
-            if(size == 0) {
+            if (size == 0) {
                 break;
             }
-            while(cartList.get(i).equals(object)){
-                boolean inBounds = (i >=0) && (i < cartList.size());
+            while (cartList.get(i).equals(object)) {
+                boolean inBounds = (i >= 0) && (i < cartList.size());
                 cartList.remove(i);
                 totalPrice -= object.getPrice();
                 size = cartList.size();
-                if(size == 0) {
+                if (size == 0) {
                     break;
                 }
             }
@@ -97,12 +97,14 @@ public class ShoppingCart {
      */
     public String checkout() {
         try {
-            System.out.println("Final price is: " + getTotalPrice());
             emptyCart();
             return "Checkout complete.";
         } catch (IllegalStateException e) {
             System.err.println(e.getMessage());
             System.err.println("Add something to the cart.");
+        } finally {
+            System.out.println("Final price is: " + getTotalPrice());
+
         }
         return "";
     }
@@ -115,14 +117,13 @@ public class ShoppingCart {
     public String max() {
         int max = Integer.MIN_VALUE;
         String maxMed = "";
-        int price = 0;
         for (Medicament bean : cartList) {
             if (bean.getPrice() > max) {
                 maxMed = bean.getName();
-                price = bean.getPrice();
+                max = bean.getPrice();
             }
         }
-        return maxMed + ", price is " + price + " lei.";
+        return maxMed + ", price is " + max + " lei.";
     }
 
     public void showCart() {

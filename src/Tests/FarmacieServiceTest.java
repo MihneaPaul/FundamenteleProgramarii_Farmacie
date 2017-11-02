@@ -1,7 +1,7 @@
 package Tests;
 
 import Repository.FarmacieRepository;
-import Repository.ShoppingCart;
+import Service.ShoppingCart;
 import Service.FarmacieService;
 import Validator.MedValidator;
 
@@ -32,8 +32,17 @@ class FarmacieServiceTest {
     void deleteMed() {
         service.addMed("xyz", 30);
         service.deleteMed("xyz");
-        int afterLenght = repo.getAll().size();
-        assertEquals(afterLenght,0);
+        int afterLength = repo.getAll().size();
+        assertEquals(afterLength,0);
+    }
+
+    @org.junit.jupiter.api.Test
+    void deleteAllMeds(){
+        service.addMed("xyz",40);
+        service.addMed("xyz",40);
+        service.deleteAllMeds("xyz");
+        int afterLength = repo.getAll().size();
+        assertEquals(afterLength,0);
     }
 
     @org.junit.jupiter.api.Test

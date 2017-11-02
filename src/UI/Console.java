@@ -38,6 +38,11 @@ public class Console {
     /**
      * Console method that calls the add() method from the Service class
      */
+
+    private static boolean empty(final String s){
+        return s == null || s.trim().isEmpty();
+    }
+
     private void addMed() {
         System.out.println("Nume:  ");
         String name = scanner.nextLine();
@@ -45,35 +50,52 @@ public class Console {
         System.out.println();
 //        scanner.nextLine();
         System.out.println("Pret:  ");
-        int price = scanner.nextInt();
+//        String check = scanner.nextLine();
+        String price = scanner.next();
+//        int price2 = Integer.parseInt(check);
         System.out.println();
+        try {
+            int pr = Integer.parseInt(price);
+            Medicament m = new Medicament(name, pr);
 
-
-        Medicament m = new Medicament(name, price);
-        service.addMed(m.getName(), m.getPrice());
-        if ((int) price != price) {
-            throw new InputMismatchException("Price must be a number!");
-        } else {
+        if (!empty(name)) {
+//                service.addMed(m.getName(), m.getPrice());
+                if(service.addMed(m.getName(), m.getPrice()) != null)
             System.out.println("Medicament adaugat cu success");
+                else System.err.println("Medicamentul nu a putut fi adaugat");
+        } else {
+            System.err.println("This field should not be empty!");
         }
-//        } catch (IllegalArgumentException e) {
-//            System.err.println("Error: " + e.getMessage());
-//        } catch (InputMismatchException e){
-//            System.err.println("Wrong input");
-//        }
+        } catch (NumberFormatException e){
+            System.err.println("Price must be a number!");
+        }
     }
+
 
     /**
      * Console method that calls the delete() method from the Service class
+     * @throws IllegalArgumentException
+     * @throws InputMismatchException
      */
     private void deleteMed() {
         System.out.println("Nume:  ");
         String name = scanner.nextLine();
         name = scanner.nextLine();
         try {
-            service.deleteMed(name);
+            System.out.println(service.deleteMed(name));
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage());
+            System.out.println("Do you want to delete all the meds with this name? (Y / N)  ");
+            String selection = scanner.next().toLowerCase();
+            switch (selection){
+                case "y":
+                    System.out.println(service.deleteAllMeds(name));
+                    break;
+
+                case "n":
+                    break;
+
+            }
         } catch (InputMismatchException e) {
             System.err.println("Wrong input");
         }
@@ -153,6 +175,8 @@ public class Console {
 
     /**
      * Calls all the 'console methods' when the program starts
+     * @throws InputMismatchException
+     * @throws Exception
      */
     public void start() {
         repo.medsDB();
