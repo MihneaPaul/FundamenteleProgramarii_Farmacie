@@ -78,25 +78,25 @@ public class FarmacieService {
         return "";
     }
 
-    public String deleteAllMeds(String nameOfMed){
+    public String deleteAllMeds(String nameOfMed) {
         List<String> searchedNames;
         searchedNames = search(nameOfMed);
         try {
             deleteMed(nameOfMed);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             String name = searchedNames.get(0);
             for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
                 if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
                     farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
                 }
-                if(i>0){
-                    i--;
-                }
+//                if (i > 0) {
+//                    i--;
+//                }
             }
             return "Medicamentul a fost sters cu success";
         }
-            return "";
-        }
+        return "";
+    }
 
 
     /**
@@ -238,7 +238,7 @@ public class FarmacieService {
          * @param medName
          */
         public void deleteFromCart(String medName) {
-            for (int i = 0;i < repo.getAll().size();i++) {
+            for (int i = 0; i < repo.getAll().size(); i++) {
                 if (repo.getAll().get(i).getName().equalsIgnoreCase(medName)) {
                     service.getCart().mediatorDeleteFromCart(repo.getAll().get(i));
                 }
