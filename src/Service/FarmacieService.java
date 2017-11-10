@@ -62,7 +62,7 @@ public class FarmacieService {
      *
      * @param nameOfMed - field 'name' from the Medicament class
      */
-    public String deleteMed(String nameOfMed) {
+    public boolean deleteMed(String nameOfMed) {
         List<String> searchedNames;
         searchedNames = search(nameOfMed);
 
@@ -71,32 +71,46 @@ public class FarmacieService {
             for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
                 if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
                     farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
-                    return "Medicamentul a fost sters cu success";
+//                    return "Medicamentul a fost sters cu success";
+                    return true;
                 }
             }
         } else throw new IllegalArgumentException("Found more than 1 med with this name: " + nameOfMed);
-        return "";
+//        return "";
+        return false;
     }
 
-    public String deleteAllMeds(String nameOfMed) {
+    public boolean deleteAllMeds(String nameOfMed) {
         List<String> searchedNames;
-        searchedNames = search(nameOfMed);
-        try {
-            deleteMed(nameOfMed);
-        } catch (IllegalArgumentException e) {
-            String name = searchedNames.get(0);
-            for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
-                if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
-                    farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
-                }
+                searchedNames = search(nameOfMed);
+                boolean b2 = false;
+            int count = 0;
+            int size = farmacieRepository.getAll().size();
+            try {
+                deleteMed(nameOfMed);
+                b2 = true;
+            } catch (IllegalArgumentException e) {
+                String name = searchedNames.get(0);
+                for (int i = 0; i < farmacieRepository.getAll().size(); i++) {
+                    if (name.equalsIgnoreCase(farmacieRepository.getAll().get(i).getName())) {
+                        farmacieRepository.removeFromList(farmacieRepository.getAll().get(i));
+                        b2 = true;
+                    } else {
+                        count++;
+                    }
+                    if (count == size) {
+                        b2 = false;
+                    }
+
 //                if (i > 0) {
 //                    i--;
 //                }
+                }
+
             }
-            return "Medicamentul a fost sters cu success";
+            return b2;
         }
-        return "";
-    }
+
 
 
     /**
@@ -113,6 +127,17 @@ public class FarmacieService {
             }
         }
         return searchedNames;
+    }
+
+    /**
+     * Checks if Med object with a specified name exists in the Repository
+     * @param name
+     * @return
+     */
+    public boolean exists(String name){
+        List<String> searchedNames = search(name);
+        if(searchedNames.size() == 0) return false;
+        return true;
     }
 
     /**

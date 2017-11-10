@@ -81,25 +81,38 @@ public class Console {
         System.out.println("Nume:  ");
         String name = scanner.nextLine();
         name = scanner.nextLine();
+        boolean b = service.exists(name);
         try {
-            System.out.println(service.deleteMed(name));
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
-            System.out.println("Do you want to delete all the meds with this name? (Y / N)  ");
-            String selection = scanner.next().toLowerCase();
-            switch (selection){
-                case "y":
-                    System.out.println(service.deleteAllMeds(name));
-                    break;
-
-                case "n":
-                    break;
-
+            if(service.deleteMed(name)){
+                System.out.println("Medicamentul a fost sters cu success");
             }
-        } catch (InputMismatchException e) {
-            System.err.println("Wrong input");
+        } catch (IllegalArgumentException e) {
+            if (b) {
+                System.err.println("Error: " + e.getMessage());
+                System.out.println("Do you want to delete all the meds with this name? (Y / N)");
+                String selection = scanner.next().toLowerCase();
+                switch (selection) {
+                    case "y":
+                        try {
+                            System.out.println(service.deleteAllMeds(name));
+                        } catch (IllegalStateException ise) {
+                            System.err.println(ise.getMessage());
+                        }
+                        break;
+
+                    case "n":
+                        break;
+
+                }
+            }
+            else{
+                System.err.println("Medicamentul nu exista in DB");
+            }
+            } catch(InputMismatchException e){
+                System.err.println("Wrong input");
+            }
         }
-    }
+
 
     /**
      * Console method that calls the search() method from the Service class

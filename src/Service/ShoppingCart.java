@@ -54,17 +54,21 @@ public class ShoppingCart {
             if (size == 0) {
                 break;
             }
-            while (cartList.get(i).getName().equals(object.getName())) {
-                boolean inBounds = (i >= 0) && (i < cartList.size());
+            if(cartList.get(i).getName().equalsIgnoreCase(object.getName())){
                 cartList.remove(i);
                 totalPrice -= object.getPrice();
-                size = cartList.size();
-                if (size == 0) {
-                    break;
-                }
+            }
+//            while (cartList.get(i).getName().equals(object.getName())) {
+//                boolean inBounds = (i >= 0) && (i < cartList.size());
+//                cartList.remove(i);
+//                totalPrice -= object.getPrice();
+//                size = cartList.size();
+//                if (size == 0) {
+//                    break;
+//                }
             }
         }
-    }
+
 
     /**
      * Accessor for the field 'totalPrice' of this class

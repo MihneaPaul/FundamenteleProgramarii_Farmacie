@@ -34,14 +34,14 @@ public class FarmacieRepository {
      */
     public boolean removeFromList(Medicament med) {
         Object[] obj = medsList.toArray();
-
+        boolean b = false;
         for (int i = 0; i < medsList.size(); i++) {
             if (medsList.get(i).getName().equalsIgnoreCase(med.getName())) {
                 medsList.remove(i);
-                return true;
+                b = true;
             }
         }
-        return false;
+        return b;
     }
 
     /**
@@ -64,7 +64,7 @@ public class FarmacieRepository {
         Medicament med5 = new Medicament("Codeine", 23);
         Medicament med6 = new Medicament("Lorazepam", 2);
         Medicament med7 = new Medicament("Viagra", 69);
-
+        Medicament med8 = new Medicament("Xanax", 99);
         add(med1);
         add(med2);
         add(med3);
@@ -72,6 +72,7 @@ public class FarmacieRepository {
         add(med5);
         add(med6);
         add(med7);
+        add(med8);
 
     }
 
