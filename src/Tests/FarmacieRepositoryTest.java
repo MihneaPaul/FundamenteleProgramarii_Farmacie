@@ -2,6 +2,7 @@ package Tests;
 
 import Domain.Medicament;
 import Repository.FarmacieRepository;
+import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 02.11.2017.
  */
-class FarmacieRepositoryTest {
+class FarmacieRepositoryTest extends TestCase {
 
     FarmacieRepository repo = new FarmacieRepository();
     @Test

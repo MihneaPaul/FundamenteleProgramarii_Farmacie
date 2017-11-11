@@ -2,6 +2,7 @@ package Tests;
 
 import Domain.Medicament;
 import Validator.MedValidator;
+import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 02.11.2017.
  */
-class MedValidatorTest {
+class MedValidatorTest extends TestCase {
     @Test
     void validate() {
         Medicament med1 = new Medicament("abc", 3);

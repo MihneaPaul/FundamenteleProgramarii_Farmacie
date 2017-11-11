@@ -4,6 +4,7 @@ import Repository.FarmacieRepository;
 import Service.ShoppingCart;
 import Service.FarmacieService;
 import Validator.MedValidator;
+import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 31.10.2017.
  */
-class FarmacieServiceTest {
+class FarmacieServiceTest extends TestCase {
 
     FarmacieRepository repo = new FarmacieRepository();
     MedValidator validator = new MedValidator();
