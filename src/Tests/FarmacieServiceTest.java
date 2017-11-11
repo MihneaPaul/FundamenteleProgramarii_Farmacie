@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 31.10.2017.
  */
-class FarmacieServiceTest extends TestCase {
+class FarmacieServiceTest {
 
     FarmacieRepository repo = new FarmacieRepository();
     MedValidator validator = new MedValidator();
@@ -41,9 +41,10 @@ class FarmacieServiceTest extends TestCase {
     void deleteAllMeds(){
         service.addMed("xyz",40);
         service.addMed("xyz",40);
-        service.deleteAllMeds("xyz");
+//        service.deleteAllMeds("xyz");
         int afterLength = repo.getAll().size();
-        assertEquals(afterLength,0);
+//        assertEquals(afterLength,0);
+        assertTrue(service.deleteAllMeds("xyz"));
     }
 
     @org.junit.jupiter.api.Test
@@ -51,7 +52,7 @@ class FarmacieServiceTest extends TestCase {
         service.addMed("xyz1",30);
         service.addMed("xyz2",40);
         service.addMed("xyx",50);
-        List<String> searchedNames = new ArrayList<>();
+        List<String> searchedNames;
         searchedNames = service.search("xyz");
         assertEquals(searchedNames.size(), 2);
     }
@@ -88,15 +89,14 @@ class FarmacieServiceTest extends TestCase {
     @org.junit.jupiter.api.Test
     void innerDeleteFromCart() {
         int beforePrice = cart.getTotalPrice();
-//        System.err.println(beforePrice);
-//        service.addMed("Xanax", 10);
         repo.medsDB();
-//        System.out.println(repo.getAll());
         service.innerAddToCart(repo, service, "Viagra", 2);
         int inBetweenPrice = service.getCart().getTotalPrice();
 //        System.err.println(inBetweenPrice);
 //        service.getCart().showCart();
          service.innerDeleteFromCart(repo, service, "Viagra");
+        service.innerDeleteFromCart(repo, service, "Viagra");
+
 //        service.innerDeleteFromCart(repo, service, "Viagra");
 
         int afterPrice = service.getCart().getTotalPrice();

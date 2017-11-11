@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 02.11.2017.
  */
-class MedValidatorTest extends TestCase {
+class MedValidatorTest {
     @Test
     void validate() {
         Medicament med1 = new Medicament("abc", 3);

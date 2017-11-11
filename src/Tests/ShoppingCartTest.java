@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 02.11.2017.
  */
-class ShoppingCartTest extends TestCase {
+class ShoppingCartTest {
     @Test
     void mediatorAddToCart() {
         ShoppingCart cart = new ShoppingCart();
@@ -28,6 +28,7 @@ class ShoppingCartTest extends TestCase {
         Medicament med = new Medicament("xyz", 14);
         int beforePrice = cart.getTotalPrice();
         cart.mediatorAddToCart(med,2);
+        cart.mediatorDeleteFromCart(med);
         cart.mediatorDeleteFromCart(med);
         int afterPrice = cart.getTotalPrice();
         assertEquals(beforePrice,afterPrice);

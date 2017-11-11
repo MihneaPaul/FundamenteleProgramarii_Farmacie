@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Mihnea on 02.11.2017.
  */
-class FarmacieRepositoryTest extends TestCase {
+class FarmacieRepositoryTest {
 
     FarmacieRepository repo = new FarmacieRepository();
     @Test

@@ -102,13 +102,10 @@ public class ShoppingCart {
     public String checkout() {
         try {
             emptyCart();
-            return "Checkout complete.";
+            return "Final price is: " + getTotalPrice() + ". Checkout complete.";
         } catch (IllegalStateException e) {
             System.err.println(e.getMessage());
             System.err.println("Add something to the cart.");
-        } finally {
-            System.out.println("Final price is: " + getTotalPrice());
-
         }
         return "";
     }
